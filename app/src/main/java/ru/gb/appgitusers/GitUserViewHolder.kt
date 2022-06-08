@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import ru.gb.appgitusers.databinding.ItemUserBinding
 import ru.gb.appgitusers.domain.GitUserEntity
 
@@ -14,6 +15,6 @@ class GitUserViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     fun bind(item: GitUserEntity) {
         binding.itemUserId.text = item.id
         binding.itemUserName.text = item.login
-
+        binding.itemUserImage.load(item.url)
     }
 }
