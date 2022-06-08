@@ -1,10 +1,10 @@
-package ru.gb.appgitusers
+package ru.gb.appgitusers.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import ru.gb.appgitusers.R
 import ru.gb.appgitusers.databinding.ItemUserBinding
 import ru.gb.appgitusers.domain.GitUserEntity
 

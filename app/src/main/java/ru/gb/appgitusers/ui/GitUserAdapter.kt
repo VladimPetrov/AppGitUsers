@@ -1,4 +1,4 @@
-package ru.gb.appgitusers
+package ru.gb.appgitusers.ui
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
