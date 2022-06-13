@@ -10,22 +10,33 @@ import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),GitUsersContract.View {
     private lateinit var binding: ActivityMainBinding
     private val adapter = GitUserAdapter()
-    private val gitUserRepository: IGitUserRepository by lazy { app.userRepo }
+    private lateinit var presenter:GitUsersContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+        initPresenter()
+    }
+
+    override fun onDestroy() {
+        presenter.detach()
+        super.onDestroy()
+    }
+
+    private fun initPresenter() {
+        presenter = GitUsersPresenter(app.userRepo)
+        presenter.attach(this)
     }
 
     private fun initView(){
         initRecycleView()
         binding.activityMainFab.setOnClickListener {
-            loadUsers()
+            presenter.onRefreshData()
         }
         showProgress(false)
     }
@@ -34,24 +45,13 @@ class MainActivity : AppCompatActivity() {
         binding.activityMainRecycler.adapter = adapter
     }
 
-    private fun loadUsers(){
-        showProgress(true)
-        gitUserRepository.loadUsers({
-            onDataLoaded(it)
-            showProgress(false)
-        },{
-            onError(it)
-            showProgress(false)
-        }
-        )
+    override fun showUsers(users:List<GitUserEntity>){
+        adapter.dataSet(users)
     }
-    private fun onDataLoaded(data:List<GitUserEntity>){
-        adapter.dataSet(data)
-    }
-    private fun onError(throwable:Throwable){
+    override fun showError(throwable:Throwable){
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
-    private fun showProgress(show: Boolean){
+    override fun showProgress(show: Boolean){
         binding.activityMainProgressBar.isVisible = show
         binding.activityMainRecycler.isVisible = !show
     }
