@@ -15,6 +15,6 @@ class GitUserViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     fun bind(item: GitUserEntity) {
         binding.itemUserId.text = item.id
         binding.itemUserName.text = item.login
-        binding.itemUserImage.load(item.url)
+        binding.itemUserImage.load(item.avatarUrl)
     }
 }
