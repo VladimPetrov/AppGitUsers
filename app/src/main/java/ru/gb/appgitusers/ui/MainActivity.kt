@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(),GitUsersContract.View {
     }
 
     private fun initPresenter() {
-        presenter = GitUsersPresenter(app.userRepo)
+        presenter = extractPresenter()
         presenter.attach(this)
     }
 
@@ -44,6 +44,13 @@ class MainActivity : AppCompatActivity(),GitUsersContract.View {
         binding.activityMainRecycler.layoutManager = LinearLayoutManager(this)
         binding.activityMainRecycler.adapter = adapter
     }
+
+    private fun extractPresenter(): GitUsersContract.Presenter {
+        return lastCustomNonConfigurationInstance as? GitUsersContract.Presenter
+            ?: GitUsersPresenter(app.userRepo)
+    }
+
+    override fun onRetainCustomNonConfigurationInstance(): GitUsersContract.Presenter = presenter
 
     override fun showUsers(users:List<GitUserEntity>){
         adapter.dataSet(users)
