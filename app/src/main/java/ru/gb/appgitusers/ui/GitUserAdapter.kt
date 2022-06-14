@@ -4,14 +4,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.gb.appgitusers.domain.GitUserEntity
 
-class GitUserAdapter:RecyclerView.Adapter<GitUserViewHolder>() {
+class GitUserAdapter(val onClickItem: ((pos:Int) -> Unit)? = null) :
+    RecyclerView.Adapter<GitUserViewHolder>() {
     private val data = mutableListOf<GitUserEntity>()
-    fun dataSet(list:List<GitUserEntity>) {
+    fun dataSet(list: List<GitUserEntity>) {
         data.clear()
         data.addAll(list)
         notifyDataSetChanged()
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = GitUserViewHolder(parent)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = GitUserViewHolder(parent,onClickItem)
 
     override fun onBindViewHolder(holder: GitUserViewHolder, position: Int) {
         holder.bind(data[position])

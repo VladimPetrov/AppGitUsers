@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import ru.gb.appgitusers.app
 import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
@@ -12,7 +13,9 @@ import ru.gb.appgitusers.domain.IGitUserRepository
 
 class MainActivity : AppCompatActivity(),GitUsersContract.View {
     private lateinit var binding: ActivityMainBinding
-    private val adapter = GitUserAdapter()
+    private val adapter = GitUserAdapter({
+        presenter.onShowDetails(it)
+    })
     private lateinit var presenter:GitUsersContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,9 @@ class MainActivity : AppCompatActivity(),GitUsersContract.View {
         binding.activityMainFab.setOnClickListener {
             presenter.onRefreshData()
         }
+        binding.activityMainDetailsView.setOnClickListener {
+            presenter.onCloseDetails()
+        }
         showProgress(false)
     }
     private fun initRecycleView() {
@@ -55,11 +61,23 @@ class MainActivity : AppCompatActivity(),GitUsersContract.View {
     override fun showUsers(users:List<GitUserEntity>){
         adapter.dataSet(users)
     }
+
+    override fun showUsersDetail(user: GitUserEntity) {
+        binding.activityMainTitle.text = user.login
+        binding.activityMainImg.load(user.avatarUrl)
+    }
+
     override fun showError(throwable:Throwable){
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
     override fun showProgress(show: Boolean){
         binding.activityMainProgressBar.isVisible = show
         binding.activityMainRecycler.isVisible = !show
+    }
+
+    override fun showDetails(show: Boolean) {
+        binding.activityMainDetailsView.isVisible = show
+        binding.activityMainRecycler.isVisible = !show
+        binding.activityMainFab.isVisible = !show
     }
 }
