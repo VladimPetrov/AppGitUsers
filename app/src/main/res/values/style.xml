@@ -6,4 +6,7 @@
         <item name="android:textSize">@dimen/text_title_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="TextTitle.Higth">
+        <item name="android:textSize">@dimen/text_title_higth_size</item>
+    </style>
 </resources>

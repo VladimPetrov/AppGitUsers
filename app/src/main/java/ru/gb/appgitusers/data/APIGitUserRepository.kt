@@ -1,4 +1,4 @@
-package ru.gb.appgitusers.domain
+package ru.gb.appgitusers.data
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -7,6 +7,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.gb.appgitusers.domain.GitUserEntity
+import ru.gb.appgitusers.domain.GitUsersAPI
+import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.ui.GitUserAdapter
 
 
