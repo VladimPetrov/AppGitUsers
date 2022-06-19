@@ -1,12 +1,12 @@
-package ru.gb.appgitusers.ui
+package ru.gb.appgitusers.ui.presenter
 
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
 
-class GitUsersPresenter(val gitUserRepository: IGitUserRepository):GitUsersContract.Presenter {
-    private var view:GitUsersContract.View? = null
-    private var listUsers:List<GitUserEntity>? = null
-    private var positionUser:Int? = null
+class GitUsersPresenter(val gitUserRepository: IGitUserRepository) : GitUsersContract.Presenter {
+    private var view: GitUsersContract.View? = null
+    private var listUsers: List<GitUserEntity>? = null
+    private var positionUser: Int? = null
     private var inProgress = false
     private var inDetails = false
 
@@ -30,12 +30,12 @@ class GitUsersPresenter(val gitUserRepository: IGitUserRepository):GitUsersContr
         inProgress = true
         view?.showProgress(inProgress)
 
-        gitUserRepository.loadUsers({
+        gitUserRepository.loadUsers(onSuccess = {
             view?.showUsers(it)
             listUsers = it
             inProgress = false
             view?.showProgress(inProgress)
-        },{
+        }, onError = {
             view?.showError(it)
             inProgress = false
             view?.showProgress(inProgress)
@@ -43,7 +43,7 @@ class GitUsersPresenter(val gitUserRepository: IGitUserRepository):GitUsersContr
         )
     }
 
-    override fun onShowDetails(pos:Int) {
+    override fun onShowDetails(pos: Int) {
         inDetails = true
         positionUser = pos
         view?.showDetails(true)

@@ -1,4 +1,4 @@
-package ru.gb.appgitusers.ui
+package ru.gb.appgitusers.ui.presenter
 
 import ru.gb.appgitusers.domain.GitUserEntity
 
@@ -13,7 +13,7 @@ interface GitUsersContract {
     }
 
     interface Presenter {
-        fun attach(view:View)
+        fun attach(view: View)
         fun detach()
         fun onRefreshData()
         fun onShowDetails(pos:Int)

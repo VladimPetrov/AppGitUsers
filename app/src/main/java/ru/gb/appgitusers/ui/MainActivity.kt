@@ -9,73 +9,80 @@ import coil.load
 import ru.gb.appgitusers.app
 import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
-import ru.gb.appgitusers.domain.IGitUserRepository
+import ru.gb.appgitusers.ui.presenter.GitUsersContract
+import ru.gb.appgitusers.ui.presenter.GitUsersPresenter
 
-class MainActivity : AppCompatActivity(),GitUsersContract.View {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = GitUserAdapter({
-        presenter.onShowDetails(it)
+        gitUserViewModel.onOpenUserDetails(it)
     })
-    private lateinit var presenter:GitUsersContract.Presenter
+    private lateinit var gitUserViewModel: GitUserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-        initPresenter()
+        initViewModel()
     }
 
-    override fun onDestroy() {
-        presenter.detach()
-        super.onDestroy()
+    private fun initViewModel() {
+        gitUserViewModel = extractViewModel()
+        gitUserViewModel.progressLiveData.observe(this) { showProgress(it) }
+        gitUserViewModel.userListLiveData.observe(this) { showUsers(it) }
+        gitUserViewModel.errorLiveData.observe(this) { showError(it) }
+        gitUserViewModel.userDetailsLiveData.observe(this) {
+            if (it == null) {
+                showDetails(false)
+            } else {
+                showDetails(true)
+                showUsersDetail(it)
+            }
+        }
     }
 
-    private fun initPresenter() {
-        presenter = extractPresenter()
-        presenter.attach(this)
-    }
+    private fun extractViewModel() = lastCustomNonConfigurationInstance as? GitUserViewModel
+        ?: GitUserViewModel(app.userRepo)
 
-    private fun initView(){
+
+    private fun initView() {
         initRecycleView()
         binding.activityMainFab.setOnClickListener {
-            presenter.onRefreshData()
+            gitUserViewModel.onRefresh()
         }
         binding.activityMainDetailsView.setOnClickListener {
-            presenter.onCloseDetails()
+            gitUserViewModel.onCloseUserDetails()
         }
         showProgress(false)
     }
+
     private fun initRecycleView() {
         binding.activityMainRecycler.layoutManager = LinearLayoutManager(this)
         binding.activityMainRecycler.adapter = adapter
     }
 
-    private fun extractPresenter(): GitUsersContract.Presenter {
-        return lastCustomNonConfigurationInstance as? GitUsersContract.Presenter
-            ?: GitUsersPresenter(app.userRepo)
-    }
+    override fun onRetainCustomNonConfigurationInstance(): GitUserViewModel = gitUserViewModel
 
-    override fun onRetainCustomNonConfigurationInstance(): GitUsersContract.Presenter = presenter
-
-    override fun showUsers(users:List<GitUserEntity>){
+    private fun showUsers(users: List<GitUserEntity>) {
         adapter.dataSet(users)
     }
 
-    override fun showUsersDetail(user: GitUserEntity) {
+    private fun showUsersDetail(user: GitUserEntity) {
         binding.activityMainTitle.text = user.login
         binding.activityMainImg.load(user.avatarUrl)
     }
 
-    override fun showError(throwable:Throwable){
+    private fun showError(throwable: Throwable) {
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
-    override fun showProgress(show: Boolean){
+
+    private fun showProgress(show: Boolean) {
         binding.activityMainProgressBar.isVisible = show
         binding.activityMainRecycler.isVisible = !show
     }
 
-    override fun showDetails(show: Boolean) {
+    private fun showDetails(show: Boolean) {
         binding.activityMainDetailsView.isVisible = show
         binding.activityMainRecycler.isVisible = !show
         binding.activityMainFab.isVisible = !show
