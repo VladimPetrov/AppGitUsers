@@ -50,4 +50,27 @@ class ApiGitUserRepository() : IGitUserRepository {
         }
         api.loadUsers().enqueue(callback)
     }
+
+    override fun loadUserDetails(
+        userName: String,
+        onSuccess: (GitUserEntity) -> Unit,
+        onError: ((Throwable) -> Unit)?
+    ) {
+        val callback = object : Callback<GitUserEntity> {
+            override fun onResponse(
+                call: Call<GitUserEntity>,
+                response: Response<GitUserEntity>
+            ) {
+                val serverResponse: GitUserEntity? = response.body()
+                if (response.isSuccessful && serverResponse != null) {
+                    onSuccess(serverResponse)
+                }
+            }
+
+            override fun onFailure(call: Call<GitUserEntity>, t: Throwable) {
+                onError?.invoke(t)
+            }
+        }
+        api.loadUserDetails(userName).enqueue(callback)
+    }
 }

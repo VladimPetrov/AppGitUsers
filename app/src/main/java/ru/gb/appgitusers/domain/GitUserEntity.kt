@@ -9,5 +9,10 @@ data class GitUserEntity(
     val login: String,
     val id: String,
     @SerializedName("avatar_url")
-    val avatarUrl: String
+    val avatarUrl: String,
+    val name: String,
+    val blog: String,
+    val location: String?,
+    val email: String?,
+    val bio: String?,
 ) : Parcelable

@@ -2,6 +2,7 @@ package ru.gb.appgitusers.ui.details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import coil.load
 import ru.gb.appgitusers.R
 import ru.gb.appgitusers.databinding.ActivityUserDetailsBinding
@@ -22,8 +23,23 @@ class UserDetailsActivity : AppCompatActivity() {
 
     }
     private fun initView(gitUserEntity: GitUserEntity) {
-        binding.activityUserDetailsTitle.text = gitUserEntity.login
-        binding.activityUserDetailsImg.load(gitUserEntity.avatarUrl)
+        with(binding) {
+            activityUserDetailsName.text = gitUserEntity.name
+            activityUserDetailsLogin.text = "(${gitUserEntity.login})"
+            activityUserDetailsImg.load(gitUserEntity.avatarUrl)
+            gitUserEntity.location?.let {
+                activityUserDetailsLocation.text = "Location:${it}"
+            }
+            gitUserEntity.blog?.let {
+                activityUserDetailsBlog.text = Html.fromHtml("<u>${it}</u>")
+            }
+            gitUserEntity.email?.let {
+                activityUserDetailsEmail.text = it
+            }
+            gitUserEntity.bio?.let {
+                activityUserDetailsBio.text = it
+            }
+        }
     }
 
     companion object {

@@ -18,7 +18,7 @@ class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() 
     }
 
     fun onOpenUserDetails(gitUserEntity: GitUserEntity) {
-        userDetailsLiveData.mutable().postValue(gitUserEntity)
+        loadUserDetails(gitUserEntity)
     }
 
     fun onCloseUserDetails() {
@@ -36,6 +36,17 @@ class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() 
         })
     }
 
+    private fun loadUserDetails(userEntity: GitUserEntity) {
+        progressLiveData.mutable().postValue(true)
+        gitUserRepository.loadUserDetails(userEntity.login,
+            onSuccess = {
+            progressLiveData.mutable().postValue(false)
+            userDetailsLiveData.mutable().postValue(it)
+        }, onError = {
+            progressLiveData.mutable().postValue(false)
+            errorLiveData.mutable().postValue(it)
+        })
+    }
 
     private fun <T> LiveData<T>.mutable(): MutableLiveData<T> {
         return this as? MutableLiveData<T>

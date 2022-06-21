@@ -6,22 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".ui.details.UserDetailsActivity">
     <TextView
-        android:id="@+id/activity_user_details_title"
+        android:id="@+id/activity_user_details_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TextTitle.Higth"
-        tools:text="Login"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="User Name"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/activity_user_details_login"/>
+    <TextView
+        android:id="@+id/activity_user_details_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextTitle.Login"
+        tools:text="(login)"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/activity_user_details_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/activity_user_details_img"/>
     <ImageView
         android:id="@+id/activity_user_details_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/activity_user_details_title"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toBottomOf="@+id/activity_user_details_login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_user_details_location"
         tools:src="@drawable/ic_baseline_refresh_24"/>
+    <TextView
+        android:id="@+id/activity_user_details_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextTitle"
+        tools:text="Location:"
+        app:layout_constraintTop_toBottomOf="@id/activity_user_details_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_user_details_blog"/>
+    <TextView
+        android:id="@+id/activity_user_details_blog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextDetails"
+        tools:text="blog"
+        app:layout_constraintTop_toBottomOf="@id/activity_user_details_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_user_details_email"/>
+    <TextView
+        android:id="@+id/activity_user_details_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextDetails"
+        tools:text="Email:"
+        app:layout_constraintTop_toBottomOf="@id/activity_user_details_blog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_user_details_bio"/>
+    <TextView
+        android:id="@+id/activity_user_details_bio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextTitle.Login"
+        tools:text="bio"
+        app:layout_constraintTop_toBottomOf="@id/activity_user_details_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
