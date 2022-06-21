@@ -11,16 +11,14 @@ class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() 
     val userListLiveData: LiveData<List<GitUserEntity>> = MutableLiveData()
     val progressLiveData: LiveData<Boolean> = MutableLiveData()
     val errorLiveData: LiveData<Throwable> = SingleEventLiveData<Throwable>()
-    val userDetailsLiveData: LiveData<GitUserEntity> = MutableLiveData()
+    val userDetailsLiveData: LiveData<GitUserEntity> = SingleEventLiveData<GitUserEntity>()
 
     fun onRefresh() {
         loadData()
     }
 
-    fun onOpenUserDetails(pos: Int) {
-        userDetailsLiveData.mutable().postValue(userListLiveData.mutable().let {
-            it.value?.get(pos) ?: null
-        })
+    fun onOpenUserDetails(gitUserEntity: GitUserEntity) {
+        userDetailsLiveData.mutable().postValue(gitUserEntity)
     }
 
     fun onCloseUserDetails() {

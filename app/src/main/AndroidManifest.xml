@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.gb.appgitusers">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppGitUsers"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.details.UserDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
