@@ -10,7 +10,7 @@ import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.ui.GitUserAdapter
 
 class UserDetailsActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityUserDetailsBinding
+    private lateinit var binding: ActivityUserDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +22,7 @@ class UserDetailsActivity : AppCompatActivity() {
         }
 
     }
+
     private fun initView(gitUserEntity: GitUserEntity) {
         with(binding) {
             activityUserDetailsName.text = gitUserEntity.name

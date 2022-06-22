@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showUserDetailsScreen(gitUserEntity: GitUserEntity) {
-        intent = Intent(this,UserDetailsActivity::class.java)
-        intent.putExtra(UserDetailsActivity.BUNDLE_USER_DETAILS,gitUserEntity)
+        intent = Intent(this, UserDetailsActivity::class.java)
+        intent.putExtra(UserDetailsActivity.BUNDLE_USER_DETAILS, gitUserEntity)
         startActivity(intent)
     }
 
@@ -49,9 +49,6 @@ class MainActivity : AppCompatActivity() {
         initRecycleView()
         binding.activityMainFab.setOnClickListener {
             gitUserViewModel.onRefresh()
-        }
-        binding.activityMainDetailsView.setOnClickListener {
-            gitUserViewModel.onCloseUserDetails()
         }
         showProgress(false)
     }
@@ -67,11 +64,6 @@ class MainActivity : AppCompatActivity() {
         adapter.dataSet(users)
     }
 
-    private fun showUsersDetail(user: GitUserEntity) {
-        binding.activityMainTitle.text = user.login
-        binding.activityMainImg.load(user.avatarUrl)
-    }
-
     private fun showError(throwable: Throwable) {
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
@@ -81,9 +73,4 @@ class MainActivity : AppCompatActivity() {
         binding.activityMainRecycler.isVisible = !show
     }
 
-    private fun showDetails(show: Boolean) {
-        binding.activityMainDetailsView.isVisible = show
-        binding.activityMainRecycler.isVisible = !show
-        binding.activityMainFab.isVisible = !show
-    }
 }
