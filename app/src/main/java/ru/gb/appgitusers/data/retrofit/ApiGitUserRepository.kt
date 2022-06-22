@@ -1,11 +1,10 @@
 package ru.gb.appgitusers.data.retrofit
 
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
@@ -17,6 +16,7 @@ class ApiGitUserRepository() : IGitUserRepository {
 
     private val api = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .baseUrl(BASE_URL)
         .client(OkHttpClient.Builder().apply {
             addInterceptor(HttpLoggingInterceptor().apply {
@@ -33,22 +33,10 @@ class ApiGitUserRepository() : IGitUserRepository {
         onSuccess: (List<GitUserEntity>) -> Unit,
         onError: ((Throwable) -> Unit)?
     ) {
-        val callback = object : Callback<List<GitUserEntity>> {
-            override fun onResponse(
-                call: Call<List<GitUserEntity>>,
-                response: Response<List<GitUserEntity>>
-            ) {
-                val serverResponse: List<GitUserEntity>? = response.body()
-                if (response.isSuccessful && serverResponse != null) {
-                    onSuccess(serverResponse)
-                }
-            }
-
-            override fun onFailure(call: Call<List<GitUserEntity>>, t: Throwable) {
-                onError?.invoke(t)
-            }
-        }
-        api.loadUsers().enqueue(callback)
+        api.loadUsers().subscribeBy(
+            onSuccess = { onSuccess(it) },
+            onError = { onError?.invoke(it)}
+        )
     }
 
     override fun loadUserDetails(
@@ -56,21 +44,10 @@ class ApiGitUserRepository() : IGitUserRepository {
         onSuccess: (GitUserEntity) -> Unit,
         onError: ((Throwable) -> Unit)?
     ) {
-        val callback = object : Callback<GitUserEntity> {
-            override fun onResponse(
-                call: Call<GitUserEntity>,
-                response: Response<GitUserEntity>
-            ) {
-                val serverResponse: GitUserEntity? = response.body()
-                if (response.isSuccessful && serverResponse != null) {
-                    onSuccess(serverResponse)
-                }
-            }
 
-            override fun onFailure(call: Call<GitUserEntity>, t: Throwable) {
-                onError?.invoke(t)
-            }
-        }
-        api.loadUserDetails(userName).enqueue(callback)
+        api.loadUserDetails(userName).subscribeBy(
+            onSuccess = { onSuccess(it) },
+            onError = { onError?.invoke(it)}
+        )
     }
 }

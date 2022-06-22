@@ -9,8 +9,8 @@ import ru.gb.appgitusers.domain.IGitUserRepository
 
 class App : Application() {
     val userRepo: IGitUserRepository by lazy {
-        LocalGitUserRepository()
-        //ApiGitUserRepository()
+        //LocalGitUserRepository()
+        ApiGitUserRepository()
     }
 }
 
