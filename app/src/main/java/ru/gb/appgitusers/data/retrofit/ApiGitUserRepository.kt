@@ -35,7 +35,7 @@ class ApiGitUserRepository() : IGitUserRepository {
     ) {
         api.loadUsers().subscribeBy(
             onSuccess = { onSuccess(it) },
-            onError = { onError?.invoke(it)}
+            onError = { onError?.invoke(it) }
         )
     }
 
@@ -47,7 +47,7 @@ class ApiGitUserRepository() : IGitUserRepository {
 
         api.loadUserDetails(userName).subscribeBy(
             onSuccess = { onSuccess(it) },
-            onError = { onError?.invoke(it)}
+            onError = { onError?.invoke(it) }
         )
     }
 }

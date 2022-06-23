@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import ru.gb.appgitusers.app
+import ru.gb.appgitusers.data.room.RoomGitUserRepository
 import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.ui.details.UserDetailsActivity
@@ -36,7 +37,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun extractViewModel() = lastCustomNonConfigurationInstance as? GitUserViewModel
-        ?: GitUserViewModel(app.userRepo)
+        ?: GitUserViewModel(
+            app.userRepo,
+            RoomGitUserRepository(app.getGitUserDao(applicationContext))
+        )
 
 
     private fun showUserDetailsScreen(gitUserEntity: GitUserEntity) {

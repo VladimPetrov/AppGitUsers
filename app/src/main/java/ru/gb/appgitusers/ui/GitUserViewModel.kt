@@ -3,11 +3,15 @@ package ru.gb.appgitusers.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.gb.appgitusers.data.room.RoomGitUserRepository
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.utils.SingleEventLiveData
 
-class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() {
+class GitUserViewModel(
+    private val gitUserRepository: IGitUserRepository,
+    private val cacheRepository: RoomGitUserRepository
+) : ViewModel() {
     val userListLiveData: LiveData<List<GitUserEntity>> = MutableLiveData()
     val progressLiveData: LiveData<Boolean> = MutableLiveData()
     val errorLiveData: LiveData<Throwable> = SingleEventLiveData<Throwable>()
@@ -26,11 +30,14 @@ class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() 
         gitUserRepository.loadUsers(onSuccess = {
             progressLiveData.mutable().postValue(false)
             userListLiveData.mutable().postValue(it)
+            cacheRepository.addUsers(it)
         }, onError = {
             progressLiveData.mutable().postValue(false)
             errorLiveData.mutable().postValue(it)
+            userListLiveData.mutable().postValue(cacheRepository.loadUsers())
         })
     }
+
 
     private fun loadUserDetails(userEntity: GitUserEntity) {
         progressLiveData.mutable().postValue(true)
@@ -41,8 +48,11 @@ class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() 
             }, onError = {
                 progressLiveData.mutable().postValue(false)
                 errorLiveData.mutable().postValue(it)
+                userDetailsLiveData.mutable()
+                    .postValue(cacheRepository.loadUserDetails(userEntity.login))
             })
     }
+
 
     private fun <T> LiveData<T>.mutable(): MutableLiveData<T> {
         return this as? MutableLiveData<T>
