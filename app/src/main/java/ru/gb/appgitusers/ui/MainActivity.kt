@@ -38,8 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractViewModel() = lastCustomNonConfigurationInstance as? GitUserViewModel
         ?: GitUserViewModel(
-            app.userRepo,
-            RoomGitUserRepository(app.getGitUserDao(applicationContext))
+            app.userRepo
         )
 
 

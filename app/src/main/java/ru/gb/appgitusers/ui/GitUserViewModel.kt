@@ -9,8 +9,7 @@ import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.utils.SingleEventLiveData
 
 class GitUserViewModel(
-    private val gitUserRepository: IGitUserRepository,
-    private val cacheRepository: RoomGitUserRepository
+    private val gitUserRepository: IGitUserRepository
 ) : ViewModel() {
     val userListLiveData: LiveData<List<GitUserEntity>> = MutableLiveData()
     val progressLiveData: LiveData<Boolean> = MutableLiveData()
@@ -30,14 +29,11 @@ class GitUserViewModel(
         gitUserRepository.loadUsers(onSuccess = {
             progressLiveData.mutable().postValue(false)
             userListLiveData.mutable().postValue(it)
-            cacheRepository.addUsers(it)
         }, onError = {
             progressLiveData.mutable().postValue(false)
             errorLiveData.mutable().postValue(it)
-            userListLiveData.mutable().postValue(cacheRepository.loadUsers())
         })
     }
-
 
     private fun loadUserDetails(userEntity: GitUserEntity) {
         progressLiveData.mutable().postValue(true)
@@ -48,8 +44,6 @@ class GitUserViewModel(
             }, onError = {
                 progressLiveData.mutable().postValue(false)
                 errorLiveData.mutable().postValue(it)
-                userDetailsLiveData.mutable()
-                    .postValue(cacheRepository.loadUserDetails(userEntity.login))
             })
     }
 
