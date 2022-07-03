@@ -1,5 +1,6 @@
 package ru.gb.appgitusers.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -7,10 +8,10 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import ru.gb.appgitusers.app
+import ru.gb.appgitusers.data.room.RoomGitUserRepository
 import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
-import ru.gb.appgitusers.ui.presenter.GitUsersContract
-import ru.gb.appgitusers.ui.presenter.GitUsersPresenter
+import ru.gb.appgitusers.ui.details.UserDetailsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -32,27 +33,26 @@ class MainActivity : AppCompatActivity() {
         gitUserViewModel.progressLiveData.observe(this) { showProgress(it) }
         gitUserViewModel.userListLiveData.observe(this) { showUsers(it) }
         gitUserViewModel.errorLiveData.observe(this) { showError(it) }
-        gitUserViewModel.userDetailsLiveData.observe(this) {
-            if (it == null) {
-                showDetails(false)
-            } else {
-                showDetails(true)
-                showUsersDetail(it)
-            }
-        }
+        gitUserViewModel.userDetailsLiveData.observe(this) { showUserDetailsScreen(it) }
     }
 
     private fun extractViewModel() = lastCustomNonConfigurationInstance as? GitUserViewModel
-        ?: GitUserViewModel(app.userRepo)
+        ?: GitUserViewModel(
+            app.userRepo,
+            RoomGitUserRepository(app.getGitUserDao(applicationContext))
+        )
 
+
+    private fun showUserDetailsScreen(gitUserEntity: GitUserEntity) {
+        intent = Intent(this, UserDetailsActivity::class.java)
+        intent.putExtra(UserDetailsActivity.BUNDLE_USER_DETAILS, gitUserEntity)
+        startActivity(intent)
+    }
 
     private fun initView() {
         initRecycleView()
         binding.activityMainFab.setOnClickListener {
             gitUserViewModel.onRefresh()
-        }
-        binding.activityMainDetailsView.setOnClickListener {
-            gitUserViewModel.onCloseUserDetails()
         }
         showProgress(false)
     }
@@ -68,11 +68,6 @@ class MainActivity : AppCompatActivity() {
         adapter.dataSet(users)
     }
 
-    private fun showUsersDetail(user: GitUserEntity) {
-        binding.activityMainTitle.text = user.login
-        binding.activityMainImg.load(user.avatarUrl)
-    }
-
     private fun showError(throwable: Throwable) {
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
@@ -82,9 +77,4 @@ class MainActivity : AppCompatActivity() {
         binding.activityMainRecycler.isVisible = !show
     }
 
-    private fun showDetails(show: Boolean) {
-        binding.activityMainDetailsView.isVisible = show
-        binding.activityMainRecycler.isVisible = !show
-        binding.activityMainFab.isVisible = !show
-    }
 }

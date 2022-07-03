@@ -8,17 +8,20 @@ import ru.gb.appgitusers.R
 import ru.gb.appgitusers.databinding.ItemUserBinding
 import ru.gb.appgitusers.domain.GitUserEntity
 
-class GitUserViewHolder(parent: ViewGroup, val onClickItem: ((pos:Int) -> Unit)? = null) : RecyclerView.ViewHolder(
+class GitUserViewHolder(parent: ViewGroup, val onClickItem: ((gitUserEntity: GitUserEntity) -> Unit)? = null) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false)
 ) {
-    val binding = ItemUserBinding.bind(itemView)
+    private val binding = ItemUserBinding.bind(itemView)
+    private lateinit var gitUserEntity: GitUserEntity
+
     init {
-        binding.itemUserName.setOnClickListener {
-            onClickItem?.invoke(adapterPosition)
+        binding.root.setOnClickListener {
+            onClickItem?.invoke(gitUserEntity)
         }
     }
 
     fun bind(item: GitUserEntity) {
+        gitUserEntity = item
         binding.itemUserId.text = item.id
         binding.itemUserName.text = item.login
         binding.itemUserImage.load(item.avatarUrl)
