@@ -1,9 +1,10 @@
-package ru.gb.appgitusers.domain
+package ru.gb.appgitusers.data.retrofit
 
 import retrofit2.Call
 import retrofit2.http.GET
+import ru.gb.appgitusers.domain.GitUserEntity
 
-interface GitUsersAPI {
+interface GitUsersApi {
 
     @GET("/users")
     fun loadUsers(): Call<List<GitUserEntity>>

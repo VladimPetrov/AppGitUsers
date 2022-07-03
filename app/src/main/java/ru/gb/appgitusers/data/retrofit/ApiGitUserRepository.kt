@@ -1,4 +1,4 @@
-package ru.gb.appgitusers.data
+package ru.gb.appgitusers.data.retrofit
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,14 +8,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gb.appgitusers.domain.GitUserEntity
-import ru.gb.appgitusers.domain.GitUsersAPI
 import ru.gb.appgitusers.domain.IGitUserRepository
-import ru.gb.appgitusers.ui.GitUserAdapter
 
 
 private const val BASE_URL = "https://api.github.com/"
 
-class APIGitUserRepository() : IGitUserRepository {
+class ApiGitUserRepository() : IGitUserRepository {
 
     private val api = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
@@ -28,7 +26,7 @@ class APIGitUserRepository() : IGitUserRepository {
             .build()
         )
         .build()
-        .create(GitUsersAPI::class.java)
+        .create(GitUsersApi::class.java)
 
 
     override fun loadUsers(
