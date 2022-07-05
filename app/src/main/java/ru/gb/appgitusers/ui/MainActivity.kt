@@ -12,6 +12,7 @@ import ru.gb.appgitusers.R
 import ru.gb.appgitusers.app
 import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
+import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.ui.details.UserDetailsActivity
 import ru.gb.appgitusers.utils.RxButton
 
@@ -22,6 +23,9 @@ class MainActivity : AppCompatActivity() {
     })
     private lateinit var gitUserViewModel: GitUserViewModel
     private lateinit var rxFab: RxButton
+    private val userRepo : IGitUserRepository by lazy {
+        app.userRepo
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun extractViewModel() = lastCustomNonConfigurationInstance as? GitUserViewModel
         ?: GitUserViewModel(
-            app.userRepo
+            userRepo
         )
 
 
