@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import org.koin.android.ext.android.inject
 import ru.gb.appgitusers.R
 import ru.gb.appgitusers.app
 import ru.gb.appgitusers.databinding.ActivityMainBinding
@@ -23,9 +24,7 @@ class MainActivity : AppCompatActivity() {
     })
     private lateinit var gitUserViewModel: GitUserViewModel
     private lateinit var rxFab: RxButton
-    private val userRepo : IGitUserRepository by lazy {
-        app.userRepo
-    }
+    private val userRepo : IGitUserRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
