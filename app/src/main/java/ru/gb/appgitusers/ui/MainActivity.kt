@@ -8,7 +8,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.kotlin.subscribeBy
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gb.appgitusers.R
 import ru.gb.appgitusers.app
@@ -23,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     private val adapter = GitUserAdapter({
         gitUserViewModel.onOpenUserDetails(it)
     })
-    private val gitUserViewModel: GitUserViewModel by viewModel()
+    private val userRepo: IGitUserRepository by lazy { app.appComponent.getUserRepository() }
+    private val gitUserViewModel: GitUserViewModel by lazy { GitUserViewModel(userRepo) }
     private lateinit var rxFab: RxButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
