@@ -6,6 +6,7 @@ import androidx.room.Room
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -16,6 +17,7 @@ import ru.gb.appgitusers.data.retrofit.GitUsersApi
 import ru.gb.appgitusers.data.room.GitUserDao
 import ru.gb.appgitusers.data.room.GitUserDataBase
 import ru.gb.appgitusers.domain.IGitUserRepository
+import ru.gb.appgitusers.ui.GitUserViewModel
 
 val appModule = module {
     single(named("baseUrl")) { "https://api.github.com/" }
@@ -49,4 +51,6 @@ val appModule = module {
         //ApiGitUserRepository()
         UserRepo(get(), get())
     }
+   viewModel { GitUserViewModel(get()) }
+
 }

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gb.appgitusers.R
 import ru.gb.appgitusers.app
 import ru.gb.appgitusers.databinding.ActivityMainBinding
@@ -22,9 +23,8 @@ class MainActivity : AppCompatActivity() {
     private val adapter = GitUserAdapter({
         gitUserViewModel.onOpenUserDetails(it)
     })
-    private lateinit var gitUserViewModel: GitUserViewModel
+    private val gitUserViewModel: GitUserViewModel by viewModel()
     private lateinit var rxFab: RxButton
-    private val userRepo : IGitUserRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +35,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        gitUserViewModel = extractViewModel()
         gitUserViewModel.progressLiveData.observe(this) { showProgress(it) }
         gitUserViewModel.userListLiveData.observe(this) { showUsers(it) }
         gitUserViewModel.errorLiveData.observe(this) { showError(it) }
         gitUserViewModel.userDetailsLiveData.observe(this) { showUserDetailsScreen(it) }
     }
-
-    private fun extractViewModel() = lastCustomNonConfigurationInstance as? GitUserViewModel
-        ?: GitUserViewModel(
-            userRepo
-        )
-
 
     private fun showUserDetailsScreen(gitUserEntity: GitUserEntity) {
         intent = Intent(this, UserDetailsActivity::class.java)
