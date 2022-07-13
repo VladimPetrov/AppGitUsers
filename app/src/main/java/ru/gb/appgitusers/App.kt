@@ -13,12 +13,17 @@ import ru.gb.appgitusers.data.UserRepo
 import ru.gb.appgitusers.data.retrofit.GitUsersApi
 import ru.gb.appgitusers.data.room.GitUserDao
 import ru.gb.appgitusers.data.room.GitUserDataBase
+import ru.gb.appgitusers.di.DependenciesHolder
 import ru.gb.appgitusers.di.Module
 import ru.gb.appgitusers.domain.IGitUserRepository
 
 
 class App : Application() {
-  val di by lazy { Module(this.applicationContext) }
+  val di : DependenciesHolder by lazy {
+      DependenciesHolder().apply {
+              Module(this@App.applicationContext,this)
+          }
+  }
 }
 
 val Context.app: App get() = applicationContext as App

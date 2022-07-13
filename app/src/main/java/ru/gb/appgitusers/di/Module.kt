@@ -9,10 +9,11 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gb.appgitusers.data.UserRepo
 import ru.gb.appgitusers.data.retrofit.GitUsersApi
+import ru.gb.appgitusers.data.room.GitUserDao
 import ru.gb.appgitusers.data.room.GitUserDataBase
 import ru.gb.appgitusers.domain.IGitUserRepository
 
-class Module(contex:Context) {
+class Module(contex:Context, diHolder: DependenciesHolder) {
     private val baseUrl = "https://api.github.com/"
     private val nameDb = "GitUsers.db"
     private val datasource by lazy {
@@ -43,4 +44,8 @@ class Module(contex:Context) {
         //ApiGitUserRepository()
         UserRepo(api,datasource)
     }
+    init {
+        diHolder.add(UserRepo::class, userRepo)
+    }
+
 }

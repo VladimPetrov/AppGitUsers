@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import ru.gb.appgitusers.R
 import ru.gb.appgitusers.app
+import ru.gb.appgitusers.data.UserRepo
 import ru.gb.appgitusers.databinding.ActivityMainBinding
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var gitUserViewModel: GitUserViewModel
     private lateinit var rxFab: RxButton
     private val userRepo : IGitUserRepository by lazy {
-        app.di.userRepo
+        app.di.get(UserRepo::class)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
