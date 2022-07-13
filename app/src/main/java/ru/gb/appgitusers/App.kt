@@ -13,40 +13,12 @@ import ru.gb.appgitusers.data.UserRepo
 import ru.gb.appgitusers.data.retrofit.GitUsersApi
 import ru.gb.appgitusers.data.room.GitUserDao
 import ru.gb.appgitusers.data.room.GitUserDataBase
+import ru.gb.appgitusers.di.Module
 import ru.gb.appgitusers.domain.IGitUserRepository
 
 
 class App : Application() {
-    private val baseUrl = "https://api.github.com/"
-    private val nameDb = "GitUsers.db"
-    private val datasource by lazy {
-        Room.databaseBuilder(
-            this.applicationContext,
-            GitUserDataBase::class.java,
-            nameDb
-        ).build().gitUserDao()
-    }
-    private val api by lazy {
-        Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .baseUrl(baseUrl)
-            .client(OkHttpClient.Builder().apply {
-                addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-            }
-                .build()
-            )
-            .build()
-            .create(GitUsersApi::class.java)
-    }
-
-    val userRepo: IGitUserRepository by lazy {
-        //LocalGitUserRepository()
-        //ApiGitUserRepository()
-        UserRepo(api,datasource)
-    }
+  val di by lazy { Module(this.applicationContext) }
 }
 
 val Context.app: App get() = applicationContext as App
