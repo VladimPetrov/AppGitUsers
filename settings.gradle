@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AppGitUsers"
 include ':app'
+include ':dil'
