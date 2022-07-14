@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.gb.appgitusers.domain.GitUserEntity
 
-class GitUserAdapter(val onClickItem: ((pos:Int) -> Unit)? = null) :
+class GitUserAdapter(val onClickItem: ((gitUserEntity: GitUserEntity) -> Unit)? = null) :
     RecyclerView.Adapter<GitUserViewHolder>() {
     private val data = mutableListOf<GitUserEntity>()
     fun dataSet(list: List<GitUserEntity>) {

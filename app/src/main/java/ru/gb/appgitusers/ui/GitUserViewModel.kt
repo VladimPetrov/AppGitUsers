@@ -3,28 +3,25 @@ package ru.gb.appgitusers.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.gb.appgitusers.data.room.RoomGitUserRepository
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.utils.SingleEventLiveData
 
-class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() {
+class GitUserViewModel(
+    private val gitUserRepository: IGitUserRepository
+) : ViewModel() {
     val userListLiveData: LiveData<List<GitUserEntity>> = MutableLiveData()
     val progressLiveData: LiveData<Boolean> = MutableLiveData()
     val errorLiveData: LiveData<Throwable> = SingleEventLiveData<Throwable>()
-    val userDetailsLiveData: LiveData<GitUserEntity> = MutableLiveData()
+    val userDetailsLiveData: LiveData<GitUserEntity> = SingleEventLiveData<GitUserEntity>()
 
     fun onRefresh() {
         loadData()
     }
 
-    fun onOpenUserDetails(pos: Int) {
-        userDetailsLiveData.mutable().postValue(userListLiveData.mutable().let {
-            it.value?.get(pos) ?: null
-        })
-    }
-
-    fun onCloseUserDetails() {
-        userDetailsLiveData.mutable().postValue(null)
+    fun onOpenUserDetails(gitUserEntity: GitUserEntity) {
+        loadUserDetails(gitUserEntity)
     }
 
     private fun loadData() {
@@ -36,6 +33,18 @@ class GitUserViewModel(val gitUserRepository: IGitUserRepository) : ViewModel() 
             progressLiveData.mutable().postValue(false)
             errorLiveData.mutable().postValue(it)
         })
+    }
+
+    private fun loadUserDetails(userEntity: GitUserEntity) {
+        progressLiveData.mutable().postValue(true)
+        gitUserRepository.loadUserDetails(userEntity.login,
+            onSuccess = {
+                progressLiveData.mutable().postValue(false)
+                userDetailsLiveData.mutable().postValue(it)
+            }, onError = {
+                progressLiveData.mutable().postValue(false)
+                errorLiveData.mutable().postValue(it)
+            })
     }
 
 
