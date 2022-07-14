@@ -3,20 +3,21 @@ package ru.gb.appgitusers
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.room.Room
-import ru.gb.appgitusers.data.LocalGitUserRepository
-import ru.gb.appgitusers.data.UserRepo
-import ru.gb.appgitusers.data.retrofit.ApiGitUserRepository
-import ru.gb.appgitusers.data.room.GitUserDao
-import ru.gb.appgitusers.data.room.GitUserDataBase
-import ru.gb.appgitusers.domain.IGitUserRepository
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import ru.gb.appgitusers.di.appModule
+
 
 class App : Application() {
 
-    val userRepo: IGitUserRepository by lazy {
-        //LocalGitUserRepository()
-        //ApiGitUserRepository()
-        UserRepo(this.applicationContext)
+    override fun onCreate() {
+        super.onCreate()
+        startKoin{
+            androidLogger()
+            androidContext(this@App)
+            modules(appModule)
+        }
     }
 }
 

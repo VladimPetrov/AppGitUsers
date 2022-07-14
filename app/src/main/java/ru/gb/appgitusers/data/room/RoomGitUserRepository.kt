@@ -1,20 +1,12 @@
 package ru.gb.appgitusers.data.room
 
-import android.app.Application
-import android.content.Context
-import android.content.pm.ApplicationInfo
-import androidx.room.Room
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.utils.converterListGitUserEntityToListRoom
 import ru.gb.appgitusers.utils.converterListRoomToListGitUserEntity
 import ru.gb.appgitusers.utils.converterRoomToGitUserEntity
 
-class RoomGitUserRepository(contex:Context):IGitUserRepository {
-    private val DB_NAME = "GitUsers.db"
-    private val datasource: GitUserDao = Room.databaseBuilder(contex,
-        GitUserDataBase::class.java,
-        DB_NAME).build().gitUserDao()
+class RoomGitUserRepository(private val datasource: GitUserDao):IGitUserRepository {
 
     override fun loadUsers(
         onSuccess: (List<GitUserEntity>) -> Unit,

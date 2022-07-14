@@ -1,15 +1,19 @@
 package ru.gb.appgitusers.data
 
-import android.content.Context
 import ru.gb.appgitusers.data.retrofit.ApiGitUserRepository
+import ru.gb.appgitusers.data.retrofit.GitUsersApi
+import ru.gb.appgitusers.data.room.GitUserDao
 import ru.gb.appgitusers.data.room.RoomGitUserRepository
 import ru.gb.appgitusers.domain.GitUserEntity
 import ru.gb.appgitusers.domain.IGitUserRepository
 
-class UserRepo(context: Context) : IGitUserRepository {
-    private val internetRepo: IGitUserRepository by lazy { ApiGitUserRepository() }
-    private val cacheRepo by lazy { RoomGitUserRepository(context) }
+class UserRepo(
+    private val api: GitUsersApi,
+    private val datasource: GitUserDao
+) : IGitUserRepository {
 
+    private val internetRepo: IGitUserRepository by lazy { ApiGitUserRepository(api) }
+    private val cacheRepo by lazy { RoomGitUserRepository(datasource) }
 
     override fun loadUsers(
         onSuccess: (List<GitUserEntity>) -> Unit,
