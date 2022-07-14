@@ -8,11 +8,13 @@ import ru.gb.appgitusers.di.Module
 
 
 class App : Application() {
-  val di : DependenciesHolder by lazy {
-      DependenciesHolder().apply {
-              Module(this@App.applicationContext,this)
-          }
-  }
+    val di by lazy {
+        DependenciesHolder().apply {
+            Module(this@App.applicationContext, this)
+        }
+    }
+
+
 }
 
 val Context.app: App get() = applicationContext as App

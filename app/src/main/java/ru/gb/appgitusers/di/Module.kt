@@ -15,7 +15,7 @@ import ru.gb.dil.DependenciesHolder
 import ru.gb.dil.Fabric
 import ru.gb.dil.Singleton
 
-class Module(contex: Context, diHolder: DependenciesHolder) {
+class Module(contex: Context, di: DependenciesHolder) {
     private val baseUrl = "https://api.github.com/"
     private val nameDb = "GitUsers.db"
     private val datasource by lazy {
@@ -41,14 +41,14 @@ class Module(contex: Context, diHolder: DependenciesHolder) {
             .create(GitUsersApi::class.java)
     }
 
-    val userRepo: IGitUserRepository by lazy {
+   private val userRepo: IGitUserRepository by lazy {
         //LocalGitUserRepository()
         //ApiGitUserRepository()
         UserRepo(api, datasource)
     }
 
     init {
-        diHolder.add(IGitUserRepository::class, Singleton { userRepo })
+        di.add(IGitUserRepository::class, Singleton { userRepo })
     }
 
 }

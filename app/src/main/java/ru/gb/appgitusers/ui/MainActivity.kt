@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     })
     private lateinit var gitUserViewModel: GitUserViewModel
     private lateinit var rxFab: RxButton
-    private val userRepo : IGitUserRepository by lazy {
+    private val userRepo: IGitUserRepository by lazy {
         app.di.get(IGitUserRepository::class)
     }
 
