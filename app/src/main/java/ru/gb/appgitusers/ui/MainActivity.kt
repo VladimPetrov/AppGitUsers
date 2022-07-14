@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var gitUserViewModel: GitUserViewModel
     private lateinit var rxFab: RxButton
     private val userRepo : IGitUserRepository by lazy {
-        app.di.get(UserRepo::class)
+        app.di.get(IGitUserRepository::class)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

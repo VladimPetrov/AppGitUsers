@@ -12,6 +12,8 @@ import ru.gb.appgitusers.data.retrofit.GitUsersApi
 import ru.gb.appgitusers.data.room.GitUserDataBase
 import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.dil.DependenciesHolder
+import ru.gb.dil.Fabric
+import ru.gb.dil.Singleton
 
 class Module(contex: Context, diHolder: DependenciesHolder) {
     private val baseUrl = "https://api.github.com/"
@@ -46,7 +48,7 @@ class Module(contex: Context, diHolder: DependenciesHolder) {
     }
 
     init {
-        diHolder.add(UserRepo::class, userRepo)
+        diHolder.add(IGitUserRepository::class, userRepo)
     }
 
 }
