@@ -48,7 +48,7 @@ class Module(contex: Context, diHolder: DependenciesHolder) {
     }
 
     init {
-        diHolder.add(IGitUserRepository::class, userRepo)
+        diHolder.add(IGitUserRepository::class, Singleton { userRepo })
     }
 
 }

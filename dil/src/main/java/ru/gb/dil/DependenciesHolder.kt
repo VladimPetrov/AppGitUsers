@@ -6,8 +6,9 @@ import kotlin.reflect.KClass
 class DependenciesHolder {
     private val dependenciesMap = HashMap<KClass<*>, DependenciesFabric>()
     fun <T : Any> get(clazz: KClass<T>): T {
-        if (dependenciesMap.containsKey(clazz) != null) {
-            return dependenciesMap[clazz] as T
+        val dependenciesFabric = dependenciesMap[clazz]
+        if (dependenciesFabric != null) {
+            return dependenciesFabric.get() as T
         } else {
             throw IllegalArgumentException("Unknown Class")
         }
@@ -17,19 +18,17 @@ class DependenciesHolder {
         dependenciesMap[clazz] = dependencies
     }
 
-    fun <T : Any> add(dependencies: DependenciesFabric) {
-        dependenciesMap[dependencies::class] = dependencies
-    }
 }
 
-abstract class DependenciesFabric(protected val creator : () -> Any) {
-    abstract fun get():Any
+abstract class DependenciesFabric(protected val creator: () -> Any) {
+    abstract fun get(): Any
 }
 
-class Fabric (creator: () -> Unit):DependenciesFabric(creator) {
+class Fabric(creator: () -> Any) : DependenciesFabric(creator) {
     override fun get(): Any = creator()
 }
-class Singleton (creator: () -> Unit): DependenciesFabric(creator) {
+
+class Singleton(creator: () -> Any) : DependenciesFabric(creator) {
     private val dependency: Any by lazy { creator.invoke() }
     override fun get(): Any = dependency
 }
