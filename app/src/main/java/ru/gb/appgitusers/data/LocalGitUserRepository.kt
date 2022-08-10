@@ -3,11 +3,12 @@ package ru.gb.appgitusers.data
 import android.os.Handler
 import android.os.Looper
 import ru.gb.appgitusers.domain.GitUserEntity
+import ru.gb.appgitusers.domain.GitUsersAPI
 import ru.gb.appgitusers.domain.IGitUserRepository
 
 private const val LOAD_DATA_DELAY = 3_000L
 
-class LocalGitUserRepository: IGitUserRepository {
+class LocalGitUserRepository(private val api: GitUsersAPI): IGitUserRepository {
 
     private val data: List<GitUserEntity> = listOf(
         GitUserEntity("mojombo", "1", "https://avatars.githubusercontent.com/u/1?v=4"),

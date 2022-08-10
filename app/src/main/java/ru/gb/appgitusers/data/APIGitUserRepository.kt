@@ -13,23 +13,9 @@ import ru.gb.appgitusers.domain.IGitUserRepository
 import ru.gb.appgitusers.ui.GitUserAdapter
 
 
-private const val BASE_URL = "https://api.github.com/"
 
-class APIGitUserRepository() : IGitUserRepository {
 
-    private val api = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .client(OkHttpClient.Builder().apply {
-            addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-        }
-            .build()
-        )
-        .build()
-        .create(GitUsersAPI::class.java)
-
+class APIGitUserRepository(private val api: GitUsersAPI) : IGitUserRepository {
 
     override fun loadUsers(
         onSuccess: (List<GitUserEntity>) -> Unit,
